@@ -1,4 +1,4 @@
 baseURL = 'https://monsooooon.github.io/'
 languageCode = 'en-us'
 title = 'Monsooooon'
-theme = 'ananke'
+theme = 'hermit'
