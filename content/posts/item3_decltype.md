@@ -20,7 +20,7 @@ tags:
 ```cpp
 // cpp 11
 template<typename Container, typename Index>
-auto wrapFunc(Container& c, Index i) -> decltype(c[i]) {
+auto authAndAccess(Container& c, Index i) -> decltype(c[i]) {
     authenticateUser();
     return c[i];
 }
@@ -32,7 +32,7 @@ auto wrapFunc(Container& c, Index i) -> decltype(c[i]) {
 ```cpp
 // cpp 14
 template<typename Container, typename Index>
-decltype(auto) wrapFunc(Container& c, Index i) {
+decltype(auto) authAndAccess(Container& c, Index i) {
     authenticateUser();
     return c[i];
 }
