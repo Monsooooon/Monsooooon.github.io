@@ -8,18 +8,18 @@
 <meta itemprop=name content="Item3_decltype">
 <meta itemprop=description content="使用背景 假设我们定义一个函数，接收一个容器对象Container，一个索引对象Index，先进行用户认证，然后返回容器里一个对象的引用。需要通过 decltype，才能知道容器的类型参数。
 具体使用 对容器的元素类型进行推导 在cpp11中我们使用trailling type deduction的方式, 如下
-// cpp 11 template<typename Container, typename Index> auto wrapFunc(Container& c, Index i) -> decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
+// cpp 11 template<typename Container, typename Index> auto authAndAccess(Container& c, Index i) -> decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
 如果只使用auto而不使用decltype, 则返回类型是by value， 而不是by reference。故需要使用decltype。
-// cpp 14 template<typename Container, typename Index> decltype(auto) wrapFunc(Container& c, Index i) { authenticateUser(); return c[i]; } 同样，对于变量也可以用 decltype(auto) 来保证所推导的类型包含修饰符。
+// cpp 14 template<typename Container, typename Index> decltype(auto) authAndAccess(Container& c, Index i) { authenticateUser(); return c[i]; } 同样，对于变量也可以用 decltype(auto) 来保证所推导的类型包含修饰符。
 Widget w; const Widget& cw = w; auto myWidget1 = cw; // type: Widget decltype(auto) myWidget2 = cw; // type: const Widget& 对 Universal Reference 进行类型推导 前面的例子中，函数wrapFunc接收的容器类型是 Container&, 无法绑定临时对象（rvalue）。为了支持这一点， 可以替换成 Container&&."><meta itemprop=datePublished content="2022-02-10T12:09:32+08:00">
 <meta itemprop=dateModified content="2022-02-10T12:09:32+08:00">
 <meta itemprop=wordCount content="181">
 <meta itemprop=keywords content="effetive_modern_cpp,cpp,"><meta property="og:title" content="Item3_decltype">
 <meta property="og:description" content="使用背景 假设我们定义一个函数，接收一个容器对象Container，一个索引对象Index，先进行用户认证，然后返回容器里一个对象的引用。需要通过 decltype，才能知道容器的类型参数。
 具体使用 对容器的元素类型进行推导 在cpp11中我们使用trailling type deduction的方式, 如下
-// cpp 11 template<typename Container, typename Index> auto wrapFunc(Container& c, Index i) -> decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
+// cpp 11 template<typename Container, typename Index> auto authAndAccess(Container& c, Index i) -> decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
 如果只使用auto而不使用decltype, 则返回类型是by value， 而不是by reference。故需要使用decltype。
-// cpp 14 template<typename Container, typename Index> decltype(auto) wrapFunc(Container& c, Index i) { authenticateUser(); return c[i]; } 同样，对于变量也可以用 decltype(auto) 来保证所推导的类型包含修饰符。
+// cpp 14 template<typename Container, typename Index> decltype(auto) authAndAccess(Container& c, Index i) { authenticateUser(); return c[i]; } 同样，对于变量也可以用 decltype(auto) 来保证所推导的类型包含修饰符。
 Widget w; const Widget& cw = w; auto myWidget1 = cw; // type: Widget decltype(auto) myWidget2 = cw; // type: const Widget& 对 Universal Reference 进行类型推导 前面的例子中，函数wrapFunc接收的容器类型是 Container&, 无法绑定临时对象（rvalue）。为了支持这一点， 可以替换成 Container&&.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://monsooooon.github.io/posts/item3_decltype/"><meta property="article:section" content="posts">
@@ -29,9 +29,9 @@ Widget w; const Widget& cw = w; auto myWidget1 = cw; // type: Widget decltype(au
 <meta name=twitter:title content="Item3_decltype">
 <meta name=twitter:description content="使用背景 假设我们定义一个函数，接收一个容器对象Container，一个索引对象Index，先进行用户认证，然后返回容器里一个对象的引用。需要通过 decltype，才能知道容器的类型参数。
 具体使用 对容器的元素类型进行推导 在cpp11中我们使用trailling type deduction的方式, 如下
-// cpp 11 template<typename Container, typename Index> auto wrapFunc(Container& c, Index i) -> decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
+// cpp 11 template<typename Container, typename Index> auto authAndAccess(Container& c, Index i) -> decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
 如果只使用auto而不使用decltype, 则返回类型是by value， 而不是by reference。故需要使用decltype。
-// cpp 14 template<typename Container, typename Index> decltype(auto) wrapFunc(Container& c, Index i) { authenticateUser(); return c[i]; } 同样，对于变量也可以用 decltype(auto) 来保证所推导的类型包含修饰符。
+// cpp 14 template<typename Container, typename Index> decltype(auto) authAndAccess(Container& c, Index i) { authenticateUser(); return c[i]; } 同样，对于变量也可以用 decltype(auto) 来保证所推导的类型包含修饰符。
 Widget w; const Widget& cw = w; auto myWidget1 = cw; // type: Widget decltype(auto) myWidget2 = cw; // type: const Widget& 对 Universal Reference 进行类型推导 前面的例子中，函数wrapFunc接收的容器类型是 Container&, 无法绑定临时对象（rvalue）。为了支持这一点， 可以替换成 Container&&.">
 <link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
@@ -81,7 +81,7 @@ Widget w; const Widget& cw = w; auto myWidget1 = cw; // type: Widget decltype(au
 <p>在cpp11中我们使用<code>trailling type deduction</code>的方式, 如下</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=c1>// cpp 11
 </span><span class=c1></span><span class=k>template</span><span class=o>&lt;</span><span class=k>typename</span> <span class=n>Container</span><span class=p>,</span> <span class=k>typename</span> <span class=n>Index</span><span class=o>&gt;</span>
-<span class=k>auto</span> <span class=n>wrapFunc</span><span class=p>(</span><span class=n>Container</span><span class=o>&amp;</span> <span class=n>c</span><span class=p>,</span> <span class=n>Index</span> <span class=n>i</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=k>decltype</span><span class=p>(</span><span class=n>c</span><span class=p>[</span><span class=n>i</span><span class=p>])</span> <span class=p>{</span>
+<span class=k>auto</span> <span class=n>authAndAccess</span><span class=p>(</span><span class=n>Container</span><span class=o>&amp;</span> <span class=n>c</span><span class=p>,</span> <span class=n>Index</span> <span class=n>i</span><span class=p>)</span> <span class=o>-&gt;</span> <span class=k>decltype</span><span class=p>(</span><span class=n>c</span><span class=p>[</span><span class=n>i</span><span class=p>])</span> <span class=p>{</span>
     <span class=n>authenticateUser</span><span class=p>();</span>
     <span class=k>return</span> <span class=n>c</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
 <span class=p>}</span>
@@ -89,7 +89,7 @@ Widget w; const Widget& cw = w; auto myWidget1 = cw; // type: Widget decltype(au
 <p>如果只使用auto而不使用decltype, 则返回类型是by value， 而不是by reference。故需要使用decltype。</p>
 <div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=c1>// cpp 14
 </span><span class=c1></span><span class=k>template</span><span class=o>&lt;</span><span class=k>typename</span> <span class=n>Container</span><span class=p>,</span> <span class=k>typename</span> <span class=n>Index</span><span class=o>&gt;</span>
-<span class=k>decltype</span><span class=p>(</span><span class=k>auto</span><span class=p>)</span> <span class=n>wrapFunc</span><span class=p>(</span><span class=n>Container</span><span class=o>&amp;</span> <span class=n>c</span><span class=p>,</span> <span class=n>Index</span> <span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+<span class=k>decltype</span><span class=p>(</span><span class=k>auto</span><span class=p>)</span> <span class=n>authAndAccess</span><span class=p>(</span><span class=n>Container</span><span class=o>&amp;</span> <span class=n>c</span><span class=p>,</span> <span class=n>Index</span> <span class=n>i</span><span class=p>)</span> <span class=p>{</span>
     <span class=n>authenticateUser</span><span class=p>();</span>
     <span class=k>return</span> <span class=n>c</span><span class=p>[</span><span class=n>i</span><span class=p>];</span>
 <span class=p>}</span>
