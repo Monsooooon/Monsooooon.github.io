@@ -1,4 +1,72 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Monsooooon</title><link>https://monsooooon.github.io/posts/</link><description>Recent content in Posts on Monsooooon</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 10 Feb 2022 12:09:32 +0800</lastBuildDate><atom:link href="https://monsooooon.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Item3_decltype</title><link>https://monsooooon.github.io/posts/item3_decltype/</link><pubDate>Thu, 10 Feb 2022 12:09:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/item3_decltype/</guid><description>test for cpp</description><content type="html">&lt;p>test for cpp&lt;/p></content></item><item><title>Hello World</title><link>https://monsooooon.github.io/posts/hello-world/</link><pubDate>Tue, 01 Feb 2022 20:56:23 +0800</pubDate><guid>https://monsooooon.github.io/posts/hello-world/</guid><description>What ??? this is great
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Monsooooon</title><link>https://monsooooon.github.io/posts/</link><description>Recent content in Posts on Monsooooon</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><copyright>This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.</copyright><lastBuildDate>Thu, 10 Feb 2022 12:09:32 +0800</lastBuildDate><atom:link href="https://monsooooon.github.io/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Item3_decltype</title><link>https://monsooooon.github.io/posts/item3_decltype/</link><pubDate>Thu, 10 Feb 2022 12:09:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/item3_decltype/</guid><description>使用背景 假设我们定义一个函数，接收一个容器对象Container，一个索引对象Index，先进行用户认证，然后返回容器里一个对象的引用。需要通过 decltype，才能知道容器的类型参数。
+具体使用 对容器的元素类型进行推导 在cpp11中我们使用trailling type deduction的方式, 如下
+// cpp 11 template&amp;lt;typename Container, typename Index&amp;gt; auto wrapFunc(Container&amp;amp; c, Index i) -&amp;gt; decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
+如果只使用auto而不使用decltype, 则返回类型是by value， 而不是by reference。故需要使用decltype。
+// cpp 14 template&amp;lt;typename Container, typename Index&amp;gt; decltype(auto) wrapFunc(Container&amp;amp; c, Index i) { authenticateUser(); return c[i]; } 同样，对于变量也可以用 decltype(auto) 来保证所推导的类型包含修饰符。
+Widget w; const Widget&amp;amp; cw = w; auto myWidget1 = cw; // type: Widget decltype(auto) myWidget2 = cw; // type: const Widget&amp;amp; 对 Universal Reference 进行类型推导 前面的例子中，函数wrapFunc接收的容器类型是 Container&amp;amp;, 无法绑定临时对象（rvalue）。为了支持这一点， 可以替换成 Container&amp;amp;&amp;amp;.</description><content type="html"><![CDATA[<h2 id="使用背景">使用背景</h2>
+<p>假设我们定义一个函数，接收一个容器对象Container，一个索引对象Index，先进行用户认证，然后返回容器里一个对象的引用。需要通过 <code>decltype</code>，才能知道容器的类型参数。</p>
+<h2 id="具体使用">具体使用</h2>
+<h3 id="对容器的元素类型进行推导">对容器的元素类型进行推导</h3>
+<p>在cpp11中我们使用<code>trailling type deduction</code>的方式, 如下</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// cpp 11
+</span><span class="c1"></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Container</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Index</span><span class="o">&gt;</span>
+<span class="k">auto</span> <span class="n">wrapFunc</span><span class="p">(</span><span class="n">Container</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">,</span> <span class="n">Index</span> <span class="n">i</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">authenticateUser</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div><p>在cpp14中，可以通过<code>decltype(auto)</code>的方式来实现同样的功能。</p>
+<p>如果只使用auto而不使用decltype, 则返回类型是by value， 而不是by reference。故需要使用decltype。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// cpp 14
+</span><span class="c1"></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Container</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Index</span><span class="o">&gt;</span>
+<span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span> <span class="n">wrapFunc</span><span class="p">(</span><span class="n">Container</span><span class="o">&amp;</span> <span class="n">c</span><span class="p">,</span> <span class="n">Index</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">authenticateUser</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div><p>同样，对于变量也可以用 <code>decltype(auto)</code> 来保证所推导的类型包含修饰符。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">Widget</span> <span class="n">w</span><span class="p">;</span>
+<span class="k">const</span> <span class="n">Widget</span><span class="o">&amp;</span> <span class="n">cw</span> <span class="o">=</span> <span class="n">w</span><span class="p">;</span>
+<span class="k">auto</span> <span class="n">myWidget1</span> <span class="o">=</span> <span class="n">cw</span><span class="p">;</span>            <span class="c1">// type: Widget
+</span><span class="c1"></span><span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span> <span class="n">myWidget2</span> <span class="o">=</span> <span class="n">cw</span><span class="p">;</span>  <span class="c1">// type: const Widget&amp;
+</span></code></pre></div><h3 id="对-universal-reference-进行类型推导">对 Universal Reference 进行类型推导</h3>
+<p>前面的例子中，函数wrapFunc接收的容器类型是 Container&amp;, 无法绑定临时对象（rvalue）。为了支持这一点， 可以替换成 <code>Container&amp;&amp;</code>.
+因此可以替换为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="c1">// cpp 14
+</span><span class="c1"></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Container</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Index</span><span class="o">&gt;</span>
+<span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span> <span class="n">authAndAccess</span><span class="p">(</span><span class="n">Container</span><span class="o">&amp;&amp;</span> <span class="n">c</span><span class="p">,</span> <span class="n">Index</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">authenticateUser</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c</span><span class="p">)[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="c1">// cpp 11
+</span><span class="c1"></span><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Container</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Index</span><span class="o">&gt;</span>
+<span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span> <span class="n">authAndAccess</span><span class="p">(</span><span class="n">Container</span><span class="o">&amp;&amp;</span> <span class="n">c</span><span class="p">,</span> <span class="n">Index</span> <span class="n">i</span><span class="p">)</span>
+<span class="o">-&gt;</span> <span class="k">decltype</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c</span><span class="p">)[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+    <span class="n">authenticateUser</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c</span><span class="p">)[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div><h2 id="其他需要注意的点">其他需要注意的点</h2>
+<blockquote>
+<p>For lvalue expressions of type T other than names, decltype always reports a
+type of T&amp;.</p>
+</blockquote>
+<p>decltype对于所有非name的lvalue，推导的类型都是引用类型，对name的lvalue，推导类型是值类型。</p>
+<p>因此要小心不要意外返回了对local变量的引用</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span> <span class="n">f1</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">...</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// decltype(x) is int, so f1 returns int
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="c1">// 这里很危险！
+</span><span class="c1"></span><span class="k">decltype</span><span class="p">(</span><span class="k">auto</span><span class="p">)</span> <span class="n">f2</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">...</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="c1">// decltype((x)) is int&amp;, so f2 returns int&amp;
+</span><span class="c1"></span><span class="p">}</span>
+
+</code></pre></div>]]></content></item><item><title>Hello World</title><link>https://monsooooon.github.io/posts/hello-world/</link><pubDate>Tue, 01 Feb 2022 20:56:23 +0800</pubDate><guid>https://monsooooon.github.io/posts/hello-world/</guid><description>What ??? this is great
 Sad dsfadasf
 sdfdsaf
 asdfdsf
