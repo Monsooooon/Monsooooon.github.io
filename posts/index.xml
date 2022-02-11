@@ -116,7 +116,26 @@ class Annotation { public: Annotation(const std::string text): value(std::move(t
     <span class="n">logAndProcess</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>   <span class="c1">// log inside lvalue process
 </span><span class="c1"></span>    <span class="n">logAndProcess</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">w</span><span class="p">));</span>  <span class="c1">// log inside rvalue process
 </span><span class="c1"></span><span class="p">}</span>
-</code></pre></div>]]></content></item><item><title>Effective_Cpp_Item_33</title><link>https://monsooooon.github.io/posts/effective_cpp_item_33/</link><pubDate>Thu, 10 Feb 2022 14:09:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_33/</guid><description>Item 33: Avoid hiding inherited names.
+</code></pre></div>]]></content></item><item><title>Effective_Cpp_Item_34</title><link>https://monsooooon.github.io/posts/effective_cpp_item_34/</link><pubDate>Thu, 10 Feb 2022 14:48:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_34/</guid><description>Item 34: Differentiate between inheritance of interface and inheritance of implementation.
+there are 3 types of member functions
+pure virtual functions simple(impure) virtual functions non-virtual functions They differs in the way whether derived classes should inherit the interface or implementation:
+Pure virtual functions specify inheritance of interface only. Simple (impure) virtual functions specify inheritance of interface plus inheritance of a default implementation. Non-virtual functions specify inheritance of interface plus inheritance of a mandatory implementation.</description><content type="html"><![CDATA[<blockquote>
+<p>Item 34: Differentiate between inheritance of interface and inheritance of implementation.</p>
+</blockquote>
+<p>there are 3 types of member functions</p>
+<ul>
+<li>pure virtual functions</li>
+<li>simple(impure) virtual functions</li>
+<li>non-virtual functions</li>
+</ul>
+<p>They differs in the way whether derived classes should inherit the interface or implementation:</p>
+<ul>
+<li>Pure virtual functions specify inheritance of interface only.</li>
+<li>Simple (impure) virtual functions specify inheritance of interface plus inheritance of a default implementation.</li>
+<li>Non-virtual functions specify inheritance of interface plus inheritance of a mandatory implementation.</li>
+</ul>
+<p>When designing a Base class, think clearly about its member functions and how derived classes will use them.</p>
+]]></content></item><item><title>Effective_Cpp_Item_33</title><link>https://monsooooon.github.io/posts/effective_cpp_item_33/</link><pubDate>Thu, 10 Feb 2022 14:09:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_33/</guid><description>Item 33: Avoid hiding inherited names.
 In Cpp, names be be hidden.
 for example:
 double x; void func() { int x; cin &amp;gt;&amp;gt; x; // read the int x, not the double x; } the name searching rule is bottom-up, from local to larget scope, and finally to global scope.
