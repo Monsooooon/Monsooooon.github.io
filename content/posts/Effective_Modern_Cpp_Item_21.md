@@ -1,5 +1,5 @@
 ---
-title: "Item_21_Prefer_std_make_unique_and_std_make_shared_to_direct_use_of_new"
+title: "Effective_Modern_Cpp_Item_21"
 date: 2022-02-11T09:38:45+08:00
 draft: false
 toc: true
@@ -8,6 +8,9 @@ tags:
   - cpp
   - smart_pointer
 ---
+
+>Item 21: Prefer std::make_unique and
+std::make_shared to direct use of new.
 
 three make functions
 - std::make_unique
