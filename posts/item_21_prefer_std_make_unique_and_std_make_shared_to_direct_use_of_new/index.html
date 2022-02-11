@@ -1,0 +1,162 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta http-equiv=x-ua-compatible content="ie=edge">
+<meta name=theme-color content="#494f5c">
+<meta name=msapplication-TileColor content="#494f5c">
+<meta itemprop=name content="Item_21_Prefer_std_make_unique_and_std_make_shared_to_direct_use_of_new">
+<meta itemprop=description content="three make functions
+ std::make_unique std::make_shared std::allocate_shared  how to use? // deprecated: std::unique_ptr<Widget> upw(new Widget); auto upw(std::make_unique<Widget>()); // deprecated: std::shared_ptr<Widget> spw(new Widget); auto spw(std::make_shared<Widget>()); why use? exception safety consider the following code:
+processWidget(std::shared_ptr<Widget>(new Widget), computePriority()); possible execution order (depends on compiler)
+ new Widget computerPriority &ndash;> cause exception!! build shared_ptr  if the second step throws an exception, the new-ed Widget will NEVER be deleted.
+correct way with std::make_shared:"><meta itemprop=datePublished content="2022-02-11T09:38:45+08:00">
+<meta itemprop=dateModified content="2022-02-11T09:38:45+08:00">
+<meta itemprop=wordCount content="156">
+<meta itemprop=keywords content="cpp,smart_pointer,"><meta property="og:title" content="Item_21_Prefer_std_make_unique_and_std_make_shared_to_direct_use_of_new">
+<meta property="og:description" content="three make functions
+ std::make_unique std::make_shared std::allocate_shared  how to use? // deprecated: std::unique_ptr<Widget> upw(new Widget); auto upw(std::make_unique<Widget>()); // deprecated: std::shared_ptr<Widget> spw(new Widget); auto spw(std::make_shared<Widget>()); why use? exception safety consider the following code:
+processWidget(std::shared_ptr<Widget>(new Widget), computePriority()); possible execution order (depends on compiler)
+ new Widget computerPriority &ndash;> cause exception!! build shared_ptr  if the second step throws an exception, the new-ed Widget will NEVER be deleted.
+correct way with std::make_shared:">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://monsooooon.github.io/posts/item_21_prefer_std_make_unique_and_std_make_shared_to_direct_use_of_new/"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2022-02-11T09:38:45+08:00">
+<meta property="article:modified_time" content="2022-02-11T09:38:45+08:00">
+<meta name=twitter:card content="summary">
+<meta name=twitter:title content="Item_21_Prefer_std_make_unique_and_std_make_shared_to_direct_use_of_new">
+<meta name=twitter:description content="three make functions
+ std::make_unique std::make_shared std::allocate_shared  how to use? // deprecated: std::unique_ptr<Widget> upw(new Widget); auto upw(std::make_unique<Widget>()); // deprecated: std::shared_ptr<Widget> spw(new Widget); auto spw(std::make_shared<Widget>()); why use? exception safety consider the following code:
+processWidget(std::shared_ptr<Widget>(new Widget), computePriority()); possible execution order (depends on compiler)
+ new Widget computerPriority &ndash;> cause exception!! build shared_ptr  if the second step throws an exception, the new-ed Widget will NEVER be deleted.
+correct way with std::make_shared:">
+<link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
+<link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
+<link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
+<link rel=manifest href=/site.webmanifest>
+<link rel=mask-icon href=/safari-pinned-tab.svg color>
+<link rel="shortcut icon" href=/favicon.ico>
+<title>Item_21_Prefer_std_make_unique_and_std_make_shared_to_direct_use_of_new</title>
+<link rel=stylesheet href=https://monsooooon.github.io/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin=anonymous>
+</head>
+<body id=page>
+<header id=site-header class="animated slideInUp">
+<div class="hdr-wrapper section-inner">
+<div class=hdr-left>
+<div class=site-branding>
+<a href=https://monsooooon.github.io/>Monsooooon</a>
+</div>
+<nav class="site-nav hide-in-mobile">
+<a href=https://monsooooon.github.io/posts/>Posts</a>
+<a href=https://monsooooon.github.io/tags/>Tags</a>
+<a href=https://monsooooon.github.io/about/>About</a>
+</nav>
+</div>
+<div class="hdr-right hdr-icons">
+<button id=toc-btn class="hdr-btn desktop-only-ib" title="Table of Contents"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3" y2="6"/><line x1="3" y1="12" x2="3" y2="12"/><line x1="3" y1="18" x2="3" y2="18"/></svg></button><span class="hdr-social hide-in-mobile"><a href=https://twitter.com/Monsoon233 target=_blank rel="noopener me" title=Twitter><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9.0 01-3.14 1.53 4.48 4.48.0 00-7.86 3v1A10.66 10.66.0 013 4s-4 9 5 13a11.64 11.64.0 01-7 2c9 5 20 0 20-11.5a4.5 4.5.0 00-.08-.83A7.72 7.72.0 0023 3z"/></svg></a><a href=https://www.linkedin.com/in/yang-chen-cheer/ target=_blank rel="noopener me" title=Linkedin><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a><a href=https://github.com/Monsooooon target=_blank rel="noopener me" title=Github><svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37.0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44.0 0020 4.77 5.07 5.07.0 0019.91 1S18.73.65 16 2.48a13.38 13.38.0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07.0 005 4.77 5.44 5.44.0 003.5 8.55c0 5.42 3.3 6.61 6.44 7A3.37 3.37.0 009 18.13V22"/></svg></a></span><button id=menu-btn class=hdr-btn title=Menu><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+</div>
+</div>
+</header>
+<div id=mobile-menu class="animated fast">
+<ul>
+<li><a href=https://monsooooon.github.io/posts/>Posts</a></li>
+<li><a href=https://monsooooon.github.io/tags/>Tags</a></li>
+<li><a href=https://monsooooon.github.io/about/>About</a></li>
+</ul>
+</div>
+<main class="site-main section-inner animated fadeIn faster">
+<article class=thin>
+<header class=post-header>
+<div class=post-meta><span>Feb 11, 2022</span></div>
+<h1>Item_21_Prefer_std_make_unique_and_std_make_shared_to_direct_use_of_new</h1>
+</header>
+<div class=content>
+<p>three make functions</p>
+<ul>
+<li>std::make_unique</li>
+<li>std::make_shared</li>
+<li>std::allocate_shared</li>
+</ul>
+<h2 id=how-to-use>how to use?<a href=#how-to-use class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=c1>// deprecated: std::unique_ptr&lt;Widget&gt; upw(new Widget);
+</span><span class=c1></span><span class=k>auto</span> <span class=nf>upw</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>make_unique</span><span class=o>&lt;</span><span class=n>Widget</span><span class=o>&gt;</span><span class=p>());</span>
+
+<span class=c1>// deprecated: std::shared_ptr&lt;Widget&gt; spw(new Widget);
+</span><span class=c1></span><span class=k>auto</span> <span class=nf>spw</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>make_shared</span><span class=o>&lt;</span><span class=n>Widget</span><span class=o>&gt;</span><span class=p>());</span>
+</code></pre></div><h2 id=why-use>why use?<a href=#why-use class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h2>
+<h3 id=exception-safety>exception safety<a href=#exception-safety class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3>
+<p>consider the following code:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=n>processWidget</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>shared_ptr</span><span class=o>&lt;</span><span class=n>Widget</span><span class=o>&gt;</span><span class=p>(</span><span class=k>new</span> <span class=n>Widget</span><span class=p>),</span> <span class=n>computePriority</span><span class=p>());</span>
+</code></pre></div><p>possible execution order (depends on compiler)</p>
+<ol>
+<li>new Widget</li>
+<li>computerPriority &ndash;> cause exception!!</li>
+<li>build shared_ptr</li>
+</ol>
+<p>if the second step throws an exception, the new-ed Widget will <strong>NEVER</strong> be deleted.</p>
+<p>correct way with <code>std::make_shared</code>:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=n>processWidget</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>make_shared</span><span class=o>&lt;</span><span class=n>Widget</span><span class=o>&gt;</span><span class=p>(),</span> <span class=n>computePriority</span><span class=p>());</span>
+</code></pre></div><blockquote>
+<p>The best way to do that is to make sure that when you use
+new directly, you immediately pass the result to a smart pointer constructor in a
+statement that does nothing else.</p>
+</blockquote>
+<p>or split this statement into two parts:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=n>std</span><span class=o>::</span><span class=n>shared_ptr</span><span class=o>&lt;</span><span class=n>Widget</span><span class=o>&gt;</span> <span class=n>spw</span><span class=p>(</span><span class=k>new</span> <span class=n>Widget</span><span class=p>);</span>
+<span class=n>processWidget</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>spw</span><span class=p>),</span> <span class=n>computePriority</span><span class=p>());</span>
+</code></pre></div><h3 id=memory-allocation-efficiency>memory allocation efficiency<a href=#memory-allocation-efficiency class=anchor aria-hidden=true><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3"/><line x1="8" y1="12" x2="16" y2="12"/></svg></a></h3>
+<p>both the object and the smart_ptr need mem allocations.<br>
+we want to do it in one single shot.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=c1>// two mem allocs for two data parts
+</span><span class=c1></span><span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>Widget</span><span class=o>&gt;</span> <span class=n>upw</span><span class=p>(</span><span class=k>new</span> <span class=n>Widget</span><span class=p>);</span>
+
+<span class=c1>// one single mem alloc for two data parts
+</span><span class=c1></span><span class=k>auto</span> <span class=nf>upw</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>make_unique</span><span class=o>&lt;</span><span class=n>Widget</span><span class=o>&gt;</span><span class=p>());</span>
+</code></pre></div>
+</div>
+<div class="related-posts thin">
+<h2>See Also</h2>
+<ul>
+<li><a href=/posts/item3_decltype/>Item3_decltype</a></li>
+</ul>
+</div>
+<hr class=post-end>
+<footer class=post-info>
+<p>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://monsooooon.github.io/tags/cpp>cpp</a></span><span class=tag><a href=https://monsooooon.github.io/tags/smart_pointer>smart_pointer</a></span>
+</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>156 Words</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2022-02-11 01:38 +0000</p>
+</footer>
+</article>
+<aside id=toc>
+<div class=toc-title>Table of Contents</div>
+<nav id=TableOfContents>
+<ul>
+<li><a href=#how-to-use>how to use?</a></li>
+<li><a href=#why-use>why use?</a>
+<ul>
+<li><a href=#exception-safety>exception safety</a></li>
+<li><a href=#memory-allocation-efficiency>memory allocation efficiency</a></li>
+</ul>
+</li>
+</ul>
+</nav>
+</aside>
+<div class="post-nav thin">
+<a class=prev-post href=https://monsooooon.github.io/posts/item3_decltype/>
+<span class=post-nav-label>Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>Item3_decltype</span>
+</a>
+</div>
+<div id=comments class=thin>
+</div>
+</main>
+<footer id=site-footer class="section-inner thin animated fadeIn faster">
+<p>&copy; 2022 <a href=https://monsooooon.github.io/>Luke Chen</a> &#183; <a href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank rel=noopener>CC BY-NC 4.0</a></p>
+<p>
+Made with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> &#183; Theme <a href=https://github.com/Track3/hermit target=_blank rel=noopener>Hermit</a> &#183; <a href=https://monsooooon.github.io/posts/index.xml target=_blank title=rss><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 019 9"/><path d="M4 4a16 16 0 0116 16"/><circle cx="5" cy="19" r="1"/></svg></a>
+</p>
+</footer>
+<script src=https://monsooooon.github.io/js/bundle.min.7d8545daa55d62427355498dd8da13f98ff79a7938ce7d2a5e2ae1ec0de3beb8.js integrity="sha256-fYVF2qVdYkJzVUmN2NoT+Y/3mnk4zn0qXirh7A3jvrg=" crossorigin=anonymous></script>
+</body>
+</html>
