@@ -7,6 +7,7 @@ images:
 tags: 
   - cpp
   - smart_pointer
+  - effetive_modern_cpp
 ---
 
 >Item 21: Prefer std::make_unique and
