@@ -116,7 +116,85 @@ class Annotation { public: Annotation(const std::string text): value(std::move(t
     <span class="n">logAndProcess</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>   <span class="c1">// log inside lvalue process
 </span><span class="c1"></span>    <span class="n">logAndProcess</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">w</span><span class="p">));</span>  <span class="c1">// log inside rvalue process
 </span><span class="c1"></span><span class="p">}</span>
-</code></pre></div>]]></content></item><item><title>Effective_Cpp_Item_32</title><link>https://monsooooon.github.io/posts/effective_cpp_item_32/</link><pubDate>Thu, 10 Feb 2022 13:43:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_32/</guid><description>Item 32: Make sure public inheritance models “is-a.”
+</code></pre></div>]]></content></item><item><title>Effective_Cpp_Item_33</title><link>https://monsooooon.github.io/posts/effective_cpp_item_33/</link><pubDate>Thu, 10 Feb 2022 14:09:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_33/</guid><description>Item 33: Avoid hiding inherited names.
+In Cpp, names be be hidden.
+for example:
+double x; void func() { int x; cin &amp;gt;&amp;gt; x; // read the int x, not the double x; } the name searching rule is bottom-up, from local to larget scope, and finally to global scope.
+the same rule applies to member functions in inheritance.
+class Base { private: int x; public: virtual void mf1() = 0; virtual void mf1(int); virtual void mf2(); void mf3(); void mf3(double); .</description><content type="html"><![CDATA[<blockquote>
+<p>Item 33: Avoid hiding inherited names.</p>
+</blockquote>
+<p>In Cpp, names be be hidden.<br>
+for example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="kt">double</span> <span class="n">x</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">func</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+    <span class="n">cin</span> <span class="o">&gt;&gt;</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// read the int x, not the double x;
+</span><span class="c1"></span><span class="p">}</span>
+</code></pre></div><p>the name searching rule is bottom-up, from local to larget scope, and finally to global scope.</p>
+<p>the same rule applies to member functions in inheritance.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">Base</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">mf1</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">mf1</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">mf2</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">mf3</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">mf3</span><span class="p">(</span><span class="kt">double</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Derived</span><span class="o">:</span> <span class="k">public</span> <span class="n">Base</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">mf1</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">mf3</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">mf4</span><span class="p">();</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+</code></pre></div><p>the <code>mf1</code> and <code>mf3</code> names in Derived class hide the one in Base class</p>
+<p>therefore,</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="n">Derived</span> <span class="n">d</span><span class="p">;</span>
+<span class="n">d</span><span class="p">.</span><span class="n">mf1</span><span class="p">();</span>
+<span class="n">d</span><span class="p">.</span><span class="n">mf1</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// complier error, because Derived::mf1 hides Base::mf1(int);
+</span><span class="c1"></span>
+<span class="n">d</span><span class="p">.</span><span class="n">mf3</span><span class="p">();</span>
+<span class="n">d</span><span class="p">.</span><span class="n">mf3</span><span class="p">(</span><span class="mf">1.0</span><span class="p">);</span> <span class="c1">// complier error, because Derived::m3 hides Base::mf3(double);
+</span></code></pre></div><p>Name hiding can happens even the function arguments &amp; return types are different.</p>
+<p>To address this problem, you should use <code>using</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">Base</span> <span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+    <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">mf1</span><span class="p">()</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">mf1</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">mf2</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">mf3</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">mf3</span><span class="p">(</span><span class="kt">double</span><span class="p">);</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+<span class="k">class</span> <span class="nc">Derived</span><span class="o">:</span> <span class="k">public</span> <span class="n">Base</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">using</span> <span class="n">Base</span><span class="o">::</span><span class="n">mf1</span><span class="p">;</span> <span class="c1">// make all things in Base named mf1 and mf3
+</span><span class="c1"></span>    <span class="k">using</span> <span class="n">Base</span><span class="o">::</span><span class="n">mf3</span><span class="p">;</span> <span class="c1">// visible (and public) in Derived’s scope
+</span><span class="c1"></span>    <span class="k">virtual</span> <span class="kt">void</span> <span class="nf">mf1</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">mf3</span><span class="p">();</span>
+    <span class="kt">void</span> <span class="nf">mf4</span><span class="p">();</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+</code></pre></div><p>now the above code works</p>
+<p>In summary:</p>
+<blockquote>
+<p>If you inherit from a base class with <strong>overloaded functions</strong> and you want to redefine or override only some of them, you need
+to include a using declaration for each name you’d otherwise be hiding.
+If you don’t, some of the names you’d like to inherit will be hidden.</p>
+</blockquote>
+<blockquote>
+<p>a using declaration makes all inherited functions with a given
+name visible in the derived class.</p>
+</blockquote>
+]]></content></item><item><title>Effective_Cpp_Item_32</title><link>https://monsooooon.github.io/posts/effective_cpp_item_32/</link><pubDate>Thu, 10 Feb 2022 13:43:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_32/</guid><description>Item 32: Make sure public inheritance models “is-a.”
 the single most important rule in object-oriented programming with C++ is this: public inheritance means “is-a.”
 For example, a student is a person
 class Person { /* ... */ }; class Student : public Person { /* ... */ }; A Student can be used anywhere a Person can be used, but not vice versa.
