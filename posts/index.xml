@@ -116,7 +116,52 @@ class Annotation { public: Annotation(const std::string text): value(std::move(t
     <span class="n">logAndProcess</span><span class="p">(</span><span class="n">w</span><span class="p">);</span>   <span class="c1">// log inside lvalue process
 </span><span class="c1"></span>    <span class="n">logAndProcess</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">w</span><span class="p">));</span>  <span class="c1">// log inside rvalue process
 </span><span class="c1"></span><span class="p">}</span>
-</code></pre></div>]]></content></item><item><title>Effective_Modern_Cpp_Item_03</title><link>https://monsooooon.github.io/posts/effective_modern_cpp_item_03/</link><pubDate>Thu, 10 Feb 2022 12:09:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_modern_cpp_item_03/</guid><description>Item 3: Understand decltype.
+</code></pre></div>]]></content></item><item><title>Effective_Cpp_Item_32</title><link>https://monsooooon.github.io/posts/effective_cpp/effective_cpp_item_32/</link><pubDate>Thu, 10 Feb 2022 13:43:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp/effective_cpp_item_32/</guid><description>Item 32: Make sure public inheritance models “is-a.”
+the single most important rule in object-oriented programming with C++ is this: public inheritance means “is-a.”
+For example, a student is a person
+class Person { /* ... */ }; class Student : public Person { /* ... */ }; A Student can be used anywhere a Person can be used, but not vice versa.
+But NOTICE, sometimes the is-a relationship is misleading, especially when it comes to operations</description><content type="html"><![CDATA[<blockquote>
+<p>Item 32: Make sure public inheritance models “is-a.”</p>
+</blockquote>
+<blockquote>
+<p>the single most important rule in object-oriented programming with C++ is this: public inheritance means “is-a.”</p>
+</blockquote>
+<p>For example, a student is a person</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">Person</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">};</span>
+<span class="k">class</span> <span class="nc">Student</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Person</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">};</span>
+</code></pre></div><p>A Student can be used anywhere a Person can be used, but not vice versa.</p>
+<p>But <strong>NOTICE</strong>, sometimes the is-a relationship is misleading, especially when it comes to operations</p>
+<p>For example, a Penguin is a Bird.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">Bird</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">fly</span><span class="p">();</span> <span class="c1">// birds can fly
+</span><span class="c1"></span>    <span class="p">...</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Penguin</span><span class="o">:</span> <span class="k">public</span> <span class="n">Bird</span> <span class="p">{</span> <span class="c1">// penguins are birds
+</span><span class="c1"></span>    <span class="p">...</span>
+<span class="p">};</span>
+</code></pre></div><p>Actually, not EVERY types of Bird can fly. There are flying birds and non-flying bird.</p>
+<p>Therefore, when talking about flying, we can define a FlyingBird class.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">class</span> <span class="nc">FlyingBird</span><span class="o">:</span> <span class="k">public</span> <span class="n">Bird</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+    <span class="k">virtual</span> <span class="kt">void</span> <span class="n">fly</span><span class="p">();</span>
+    <span class="p">...</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Penguin</span><span class="o">:</span> <span class="k">public</span> <span class="n">Bird</span> <span class="p">{</span> <span class="c1">// penguins are non-flying birds
+</span><span class="c1"></span>    <span class="p">...</span>
+<span class="p">};</span>
+</code></pre></div><p>However, if the system does not need to distinguish between flying or non-flying bird, the previos design is perfectly valid.</p>
+<p>Another example of problematic OOD modeling:</p>
+<blockquote>
+<p>A Square is a Rectangle.</p>
+</blockquote>
+<p>We can have member variable <code>width</code> and <code>height</code> for a Rectangle class. These two varible can be set independently. But for a Square object, its <code>width</code> and <code>height</code> should always be equal.</p>
+<hr>
+<p>Things to remember:<br>
+Public inheritance means “is-a.” Everything that applies to base classes must also apply to derived classes, because every derived class object is a base class object.</p>
+]]></content></item><item><title>Effective_Modern_Cpp_Item_03</title><link>https://monsooooon.github.io/posts/effective_modern_cpp_item_03/</link><pubDate>Thu, 10 Feb 2022 12:09:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_modern_cpp_item_03/</guid><description>Item 3: Understand decltype.
 使用背景 假设我们定义一个函数，接收一个容器对象Container，一个索引对象Index，先进行用户认证，然后返回容器里一个对象的引用。需要通过 decltype，才能知道容器的类型参数。
 具体使用 对容器的元素类型进行推导 在cpp11中我们使用trailling type deduction的方式, 如下
 // cpp 11 template&amp;lt;typename Container, typename Index&amp;gt; auto authAndAccess(Container&amp;amp; c, Index i) -&amp;gt; decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
