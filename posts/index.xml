@@ -24,7 +24,36 @@ parameter values are statically bound.</p>
 <span class="n">D</span> <span class="n">x</span><span class="p">;</span>
 <span class="n">x</span><span class="p">.</span><span class="n">mf</span><span class="p">();</span> <span class="c1">// &#34;1&#34; not &#34;2&#34;
 </span></code></pre></div><p><strong>NOTICE</strong>: virtual function&rsquo;s default param will not be dynamically binded!</p>
-]]></content></item><item><title>Effective_Cpp_Item_36</title><link>https://monsooooon.github.io/posts/effective_cpp_item_36/</link><pubDate>Sun, 13 Feb 2022 15:54:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_36/</guid><description>Item 36: Never redefine an inherited non-virtual function.
+]]></content></item><item><title>Effective_Cpp_Item_38</title><link>https://monsooooon.github.io/posts/effective_cpp_item_38/</link><pubDate>Sun, 13 Feb 2022 16:34:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_38/</guid><description>Item 38: Model “has-a” or “is-implemented-in-terms- of” through composition.
+Composition means either “has-a” or “is-implemented-in-terms-of.”
+Let&amp;rsquo;s say that you want to implement a Set class that need less space than the standard std::set. You want to use std::list
+you probably use
+template&amp;lt;typename T&amp;gt; class MySet: std::list&amp;lt;T&amp;gt; { ... }; but that is QUITE WRONG!!!
+by using public inheritance, you are saying that a MySet object is-a std::list type.</description><content type="html"><![CDATA[<blockquote>
+<p>Item 38: Model “has-a” or “is-implemented-in-terms- of” through composition.</p>
+</blockquote>
+<p>Composition means either “has-a” or “is-implemented-in-terms-of.”</p>
+<p>Let&rsquo;s say that you want to implement a <code>Set</code> class that need less space than the standard <code>std::set</code>. You want to use <code>std::list</code></p>
+<p>you probably use</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">MySet</span><span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="p">...</span>
+<span class="p">};</span>
+</code></pre></div><p>but that is <strong>QUITE WRONG!!!</strong></p>
+<p>by using public inheritance, you are saying that a <code>MySet</code> object <code>is-a</code> <code>std::list</code> type.</p>
+<p>BUT <code>std::list</code> may contain duplicate, but a <code>MySet</code> doesn&rsquo;t.</p>
+<p>Therefore, MySet <code>is-implemented-in-terms-of</code> std::list.</p>
+<p>In that case, you should use Composition to express this relationship</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">MySet</span><span class="o">:</span> <span class="p">{</span>
+<span class="k">public</span><span class="o">:</span> 
+  <span class="kt">void</span> <span class="n">insert</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">);</span>
+  <span class="kt">void</span> <span class="nf">remove</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">item</span><span class="p">);</span>
+  <span class="c1">//...
+</span><span class="c1"></span><span class="k">private</span><span class="o">:</span>
+  <span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">rep</span><span class="p">;</span> <span class="c1">// representation for set data
+</span><span class="c1"></span><span class="p">};</span>
+</code></pre></div>]]></content></item><item><title>Effective_Cpp_Item_36</title><link>https://monsooooon.github.io/posts/effective_cpp_item_36/</link><pubDate>Sun, 13 Feb 2022 15:54:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_36/</guid><description>Item 36: Never redefine an inherited non-virtual function.
 non-virtual member functions are not very good to hide
 let&amp;rsquo;s say you have class D and class B. D inherts from B. they both have a member function mf().
 #include &amp;lt;iostream&amp;gt; class B { public: void mf() { std::cout &amp;lt;&amp;lt; &amp;#34;B::mf&amp;#34; &amp;lt;&amp;lt; std::endl; } }; class D : public B { public: void mf() { std::cout &amp;lt;&amp;lt; &amp;#34;D::mf&amp;#34; &amp;lt;&amp;lt; std::endl; } }; then calling</description><content type="html"><![CDATA[<blockquote>

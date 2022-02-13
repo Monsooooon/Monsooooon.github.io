@@ -5,38 +5,41 @@
 <meta http-equiv=x-ua-compatible content="ie=edge">
 <meta name=theme-color content="#494f5c">
 <meta name=msapplication-TileColor content="#494f5c">
-<meta itemprop=name content="Effective_Cpp_Item_37">
-<meta itemprop=description content="Item 37: Never redefine a function’s inherited default parameter value.
- virtual functions are dynamically bound, but default parameter values are statically bound.
-you should avoid adding default param to virtual functions
-let&rsquo;s say you have two class B & D. D is derived from B.
-class B { virtual void mf(int i = 1) { cout << i << endl; } }; class D : public B { virtual void mf(int i = 2) { cout << i << endl; } }; D x; x."><meta itemprop=datePublished content="2022-02-13T16:34:32+08:00">
+<meta itemprop=name content="Effective_Cpp_Item_38">
+<meta itemprop=description content="Item 38: Model “has-a” or “is-implemented-in-terms- of” through composition.
+ Composition means either “has-a” or “is-implemented-in-terms-of.”
+Let&rsquo;s say that you want to implement a Set class that need less space than the standard std::set. You want to use std::list
+you probably use
+template<typename T> class MySet: std::list<T> { ... }; but that is QUITE WRONG!!!
+by using public inheritance, you are saying that a MySet object is-a std::list type."><meta itemprop=datePublished content="2022-02-13T16:34:32+08:00">
 <meta itemprop=dateModified content="2022-02-13T16:34:32+08:00">
-<meta itemprop=wordCount content="99">
-<meta itemprop=keywords content="effective_cpp,cpp,ood,inheritance,"><meta property="og:title" content="Effective_Cpp_Item_37">
-<meta property="og:description" content="Item 37: Never redefine a function’s inherited default parameter value.
- virtual functions are dynamically bound, but default parameter values are statically bound.
-you should avoid adding default param to virtual functions
-let&rsquo;s say you have two class B & D. D is derived from B.
-class B { virtual void mf(int i = 1) { cout << i << endl; } }; class D : public B { virtual void mf(int i = 2) { cout << i << endl; } }; D x; x.">
+<meta itemprop=wordCount content="116">
+<meta itemprop=keywords content="effective_cpp,cpp,ood,inheritance,"><meta property="og:title" content="Effective_Cpp_Item_38">
+<meta property="og:description" content="Item 38: Model “has-a” or “is-implemented-in-terms- of” through composition.
+ Composition means either “has-a” or “is-implemented-in-terms-of.”
+Let&rsquo;s say that you want to implement a Set class that need less space than the standard std::set. You want to use std::list
+you probably use
+template<typename T> class MySet: std::list<T> { ... }; but that is QUITE WRONG!!!
+by using public inheritance, you are saying that a MySet object is-a std::list type.">
 <meta property="og:type" content="article">
-<meta property="og:url" content="https://monsooooon.github.io/posts/effective_cpp_item_37/"><meta property="article:section" content="posts">
+<meta property="og:url" content="https://monsooooon.github.io/posts/effective_cpp_item_38/"><meta property="article:section" content="posts">
 <meta property="article:published_time" content="2022-02-13T16:34:32+08:00">
 <meta property="article:modified_time" content="2022-02-13T16:34:32+08:00">
 <meta name=twitter:card content="summary">
-<meta name=twitter:title content="Effective_Cpp_Item_37">
-<meta name=twitter:description content="Item 37: Never redefine a function’s inherited default parameter value.
- virtual functions are dynamically bound, but default parameter values are statically bound.
-you should avoid adding default param to virtual functions
-let&rsquo;s say you have two class B & D. D is derived from B.
-class B { virtual void mf(int i = 1) { cout << i << endl; } }; class D : public B { virtual void mf(int i = 2) { cout << i << endl; } }; D x; x.">
+<meta name=twitter:title content="Effective_Cpp_Item_38">
+<meta name=twitter:description content="Item 38: Model “has-a” or “is-implemented-in-terms- of” through composition.
+ Composition means either “has-a” or “is-implemented-in-terms-of.”
+Let&rsquo;s say that you want to implement a Set class that need less space than the standard std::set. You want to use std::list
+you probably use
+template<typename T> class MySet: std::list<T> { ... }; but that is QUITE WRONG!!!
+by using public inheritance, you are saying that a MySet object is-a std::list type.">
 <link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png>
 <link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png>
 <link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png>
 <link rel=manifest href=/site.webmanifest>
 <link rel=mask-icon href=/safari-pinned-tab.svg color>
 <link rel="shortcut icon" href=/favicon.ico>
-<title>Effective_Cpp_Item_37</title>
+<title>Effective_Cpp_Item_38</title>
 <link rel=stylesheet href=https://monsooooon.github.io/css/style.min.eac77496566fd7d5768fd650ddb0b2b181ca6a2d7c5fdd6fe6b8ba4bf47e566f.css integrity="sha256-6sd0llZv19V2j9ZQ3bCysYHKai18X91v5ri6S/R+Vm8=" crossorigin=anonymous>
 </head>
 <body id=page>
@@ -68,36 +71,39 @@ class B { virtual void mf(int i = 1) { cout << i << endl; } }; class D : public 
 <article class=thin>
 <header class=post-header>
 <div class=post-meta><span>Feb 13, 2022</span></div>
-<h1>Effective_Cpp_Item_37</h1>
+<h1>Effective_Cpp_Item_38</h1>
 </header>
 <div class=content>
 <blockquote>
-<p>Item 37: Never redefine a function’s inherited default parameter value.</p>
+<p>Item 38: Model “has-a” or “is-implemented-in-terms- of” through composition.</p>
 </blockquote>
-<p>virtual functions are dynamically bound, but default
-parameter values are statically bound.</p>
-<p>you should avoid adding default param to virtual functions</p>
-<p>let&rsquo;s say you have two class B & D. D is derived from B.</p>
-<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=k>class</span> <span class=nc>B</span> <span class=p>{</span>
-  <span class=k>virtual</span> <span class=kt>void</span> <span class=nf>mf</span><span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
-    <span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>i</span> <span class=o>&lt;&lt;</span> <span class=n>endl</span><span class=p>;</span>
-  <span class=p>}</span>
+<p>Composition means either “has-a” or “is-implemented-in-terms-of.”</p>
+<p>Let&rsquo;s say that you want to implement a <code>Set</code> class that need less space than the standard <code>std::set</code>. You want to use <code>std::list</code></p>
+<p>you probably use</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span><span class=o>&lt;</span><span class=k>typename</span> <span class=n>T</span><span class=o>&gt;</span>
+<span class=k>class</span> <span class=nc>MySet</span><span class=o>:</span> <span class=n>std</span><span class=o>::</span><span class=n>list</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=p>{</span>
+  <span class=p>...</span>
 <span class=p>};</span>
-
-<span class=k>class</span> <span class=nc>D</span> <span class=o>:</span> <span class=k>public</span> <span class=n>B</span> <span class=p>{</span>
-  <span class=k>virtual</span> <span class=kt>void</span> <span class=nf>mf</span><span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>2</span><span class=p>)</span> <span class=p>{</span>
-    <span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=n>i</span> <span class=o>&lt;&lt;</span> <span class=n>endl</span><span class=p>;</span>
-  <span class=p>}</span>
-<span class=p>};</span>
-
-<span class=n>D</span> <span class=n>x</span><span class=p>;</span>
-<span class=n>x</span><span class=p>.</span><span class=n>mf</span><span class=p>();</span> <span class=c1>// &#34;1&#34; not &#34;2&#34;
-</span></code></pre></div><p><strong>NOTICE</strong>: virtual function&rsquo;s default param will not be dynamically binded!</p>
+</code></pre></div><p>but that is <strong>QUITE WRONG!!!</strong></p>
+<p>by using public inheritance, you are saying that a <code>MySet</code> object <code>is-a</code> <code>std::list</code> type.</p>
+<p>BUT <code>std::list</code> may contain duplicate, but a <code>MySet</code> doesn&rsquo;t.</p>
+<p>Therefore, MySet <code>is-implemented-in-terms-of</code> std::list.</p>
+<p>In that case, you should use Composition to express this relationship</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=k>template</span><span class=o>&lt;</span><span class=k>class</span> <span class=nc>T</span><span class=o>&gt;</span>
+<span class=k>class</span> <span class=nc>MySet</span><span class=o>:</span> <span class=p>{</span>
+<span class=k>public</span><span class=o>:</span> 
+  <span class=kt>void</span> <span class=n>insert</span><span class=p>(</span><span class=k>const</span> <span class=n>T</span><span class=o>&amp;</span> <span class=n>item</span><span class=p>);</span>
+  <span class=kt>void</span> <span class=nf>remove</span><span class=p>(</span><span class=k>const</span> <span class=n>T</span><span class=o>&amp;</span> <span class=n>item</span><span class=p>);</span>
+  <span class=c1>//...
+</span><span class=c1></span><span class=k>private</span><span class=o>:</span>
+  <span class=n>std</span><span class=o>::</span><span class=n>list</span><span class=o>&lt;</span><span class=n>T</span><span class=o>&gt;</span> <span class=n>rep</span><span class=p>;</span> <span class=c1>// representation for set data
+</span><span class=c1></span><span class=p>};</span>
+</code></pre></div>
 </div>
 <div class="related-posts thin">
 <h2>See Also</h2>
 <ul>
-<li><a href=/posts/effective_cpp_item_38/>Effective_Cpp_Item_38</a></li>
+<li><a href=/posts/effective_cpp_item_37/>Effective_Cpp_Item_37</a></li>
 <li><a href=/posts/effective_cpp_item_36/>Effective_Cpp_Item_36</a></li>
 <li><a href=/posts/effective_cpp_item_34/>Effective_Cpp_Item_34</a></li>
 <li><a href=/posts/effective_cpp_item_33/>Effective_Cpp_Item_33</a></li>
@@ -109,7 +115,7 @@ parameter values are statically bound.</p>
 <p>
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://monsooooon.github.io/tags/effective_cpp>effective_cpp</a></span><span class=tag><a href=https://monsooooon.github.io/tags/cpp>cpp</a></span><span class=tag><a href=https://monsooooon.github.io/tags/ood>ood</a></span><span class=tag><a href=https://monsooooon.github.io/tags/inheritance>inheritance</a></span>
 </p>
-<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>99 Words</p>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text"><path d="M14 2H6A2 2 0 004 4v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>116 Words</p>
 <p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>2022-02-13 08:34 +0000</p>
 </footer>
 </article>
@@ -118,8 +124,11 @@ parameter values are statically bound.</p>
 <nav id=TableOfContents></nav>
 </aside>
 <div class="post-nav thin">
-<a class=prev-post href=https://monsooooon.github.io/posts/effective_cpp_item_38/>
-<span class=post-nav-label>Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>Effective_Cpp_Item_38</span>
+<a class=next-post href=https://monsooooon.github.io/posts/effective_cpp_item_37/>
+<span class=post-nav-label><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>&nbsp;Newer</span><br><span>Effective_Cpp_Item_37</span>
+</a>
+<a class=prev-post href=https://monsooooon.github.io/posts/effective_cpp_item_36/>
+<span class=post-nav-label>Older&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span><br><span>Effective_Cpp_Item_36</span>
 </a>
 </div>
 <div id=comments class=thin>

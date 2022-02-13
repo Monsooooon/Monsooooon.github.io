@@ -2,7 +2,12 @@
 virtual functions are dynamically bound, but default parameter values are statically bound.
 you should avoid adding default param to virtual functions
 let&amp;rsquo;s say you have two class B &amp;amp; D. D is derived from B.
-class B { virtual void mf(int i = 1) { cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; } }; class D : public B { virtual void mf(int i = 2) { cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; } }; D x; x.</description></item><item><title>Effective_Cpp_Item_36</title><link>https://monsooooon.github.io/posts/effective_cpp_item_36/</link><pubDate>Sun, 13 Feb 2022 15:54:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_36/</guid><description>Item 36: Never redefine an inherited non-virtual function.
+class B { virtual void mf(int i = 1) { cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; } }; class D : public B { virtual void mf(int i = 2) { cout &amp;lt;&amp;lt; i &amp;lt;&amp;lt; endl; } }; D x; x.</description></item><item><title>Effective_Cpp_Item_38</title><link>https://monsooooon.github.io/posts/effective_cpp_item_38/</link><pubDate>Sun, 13 Feb 2022 16:34:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_38/</guid><description>Item 38: Model “has-a” or “is-implemented-in-terms- of” through composition.
+Composition means either “has-a” or “is-implemented-in-terms-of.”
+Let&amp;rsquo;s say that you want to implement a Set class that need less space than the standard std::set. You want to use std::list
+you probably use
+template&amp;lt;typename T&amp;gt; class MySet: std::list&amp;lt;T&amp;gt; { ... }; but that is QUITE WRONG!!!
+by using public inheritance, you are saying that a MySet object is-a std::list type.</description></item><item><title>Effective_Cpp_Item_36</title><link>https://monsooooon.github.io/posts/effective_cpp_item_36/</link><pubDate>Sun, 13 Feb 2022 15:54:32 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_cpp_item_36/</guid><description>Item 36: Never redefine an inherited non-virtual function.
 non-virtual member functions are not very good to hide
 let&amp;rsquo;s say you have class D and class B. D inherts from B. they both have a member function mf().
 #include &amp;lt;iostream&amp;gt; class B { public: void mf() { std::cout &amp;lt;&amp;lt; &amp;#34;B::mf&amp;#34; &amp;lt;&amp;lt; std::endl; } }; class D : public B { public: void mf() { std::cout &amp;lt;&amp;lt; &amp;#34;D::mf&amp;#34; &amp;lt;&amp;lt; std::endl; } }; then calling</description></item><item><title>Effective_Modern_Cpp_Item_21</title><link>https://monsooooon.github.io/posts/effective_modern_cpp_item_21/</link><pubDate>Fri, 11 Feb 2022 09:38:45 +0800</pubDate><guid>https://monsooooon.github.io/posts/effective_modern_cpp_item_21/</guid><description>Item 21: Prefer std::make_unique and std::make_shared to direct use of new.
@@ -33,9 +38,4 @@ But NOTICE, sometimes the is-a relationship is misleading, especially when it co
 // cpp 11 template&amp;lt;typename Container, typename Index&amp;gt; auto authAndAccess(Container&amp;amp; c, Index i) -&amp;gt; decltype(c[i]) { authenticateUser(); return c[i]; } 在cpp14中，可以通过decltype(auto)的方式来实现同样的功能。
 如果只使用auto而不使用decltype, 则返回类型是by value， 而不是by reference。故需要使用decltype。
 // cpp 14 template&amp;lt;typename Container, typename Index&amp;gt; decltype(auto) authAndAccess(Container&amp;amp; c, Index i) { authenticateUser(); return c[i]; } 同样，对于变量也可以用 decltype(auto) 来保证所推导的类型包含修饰符。
-Widget w; const Widget&amp;amp; cw = w; auto myWidget1 = cw; // type: Widget decltype(auto) myWidget2 = cw; // type: const Widget&amp;amp; 对 Universal Reference 进行类型推导 前面的例子中，函数wrapFunc接收的容器类型是 Container&amp;amp;, 无法绑定临时对象（rvalue）。为了支持这一点， 可以替换成 Container&amp;amp;&amp;amp;.</description></item><item><title>About</title><link>https://monsooooon.github.io/about/</link><pubDate>Tue, 01 Feb 2022 21:22:37 +0800</pubDate><guid>https://monsooooon.github.io/about/</guid><description>this is lukechen</description></item><item><title>Hello World</title><link>https://monsooooon.github.io/posts/hello-world/</link><pubDate>Tue, 01 Feb 2022 20:56:23 +0800</pubDate><guid>https://monsooooon.github.io/posts/hello-world/</guid><description>What ??? this is great
-Sad dsfadasf
-sdfdsaf
-asdfdsf
-sdfdsaf
-123</description></item></channel></rss>
+Widget w; const Widget&amp;amp; cw = w; auto myWidget1 = cw; // type: Widget decltype(auto) myWidget2 = cw; // type: const Widget&amp;amp; 对 Universal Reference 进行类型推导 前面的例子中，函数wrapFunc接收的容器类型是 Container&amp;amp;, 无法绑定临时对象（rvalue）。为了支持这一点， 可以替换成 Container&amp;amp;&amp;amp;.</description></item><item><title>About</title><link>https://monsooooon.github.io/about/</link><pubDate>Tue, 01 Feb 2022 21:22:37 +0800</pubDate><guid>https://monsooooon.github.io/about/</guid><description>this is lukechen</description></item></channel></rss>
